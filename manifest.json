@@ -1,0 +1,26 @@
+{
+    "name": "Link_Youla",
+    "short_name": "LY",
+    "description": "Convert links to active",
+    "author": "Epsont (Ilya Akhmanov) 2GIS company",
+    "version": "1.0",
+    "manifest_version": 3,
+    
+    "icons": {
+        "16":"icons/16.png",
+        "32":"icons/32.png",
+        "48":"icons/48.png",
+        "128":"icons/128.png"
+    },
+    "action": {
+      "default_popup": "popup.html",
+      "default_area": "navbar",
+      "default_title": "Link Youla (Подробнее)"
+    },
+    "content_scripts": [
+      {
+          "matches": [ "https://youla.2gis.local/vorwand*" ],
+          "js": [ "background.js" ]
+      }
+    ]
+}
