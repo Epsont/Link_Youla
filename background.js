@@ -11,7 +11,7 @@ function checkPage() {
                 var checking = source[0].innerHTML;
                 console.log(checking);
             };
-            if (source[0].innerHTML == 'Настольная версия' || source[0].innerHTML == 'WebYoula' || source[0].innerHTML == 'Личный кабинет' || source[0].innerHTML == 'Отдел коммерции'){
+            if (source[0].innerHTML == 'Настольная версия' || source[0].innerHTML == 'WebYoula' || source[0].innerHTML == 'Личный кабинет' || source[0].innerHTML == 'Отдел коммерции' || source[0].innerHTML == 'Оператор ЕКЦ, РГ СОВИ'){
                 var checking = source[0].innerHTML;
                 console.log(checking);
             };
