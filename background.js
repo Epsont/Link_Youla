@@ -168,10 +168,11 @@ function linkConvert() {
         var dataBase = document.body.innerHTML.match(regdataBase);
         if (dataBase) {
             dataBase = dataBase[0];
+            dataBase = dataBase.replace(/[-]*/gi, '');
             if (dataBase != 'online') {
                 const yearDataBase = dataBase.slice(0, 4);
-                const mounthDataBase = dataBase.slice(5, 7);
-                const dayDataBase = dataBase.slice(8,);
+                const mounthDataBase = dataBase.slice(4, 6);
+                const dayDataBase = dataBase.slice(6,);
                 dataBase = new Date(yearDataBase, mounthDataBase - 1, dayDataBase);
                 console.log(`Версия базы данных: ${dataBase}`);
             } else {
@@ -222,8 +223,7 @@ function linkConvert() {
     };
 
     console.log(`${resultCompaireDate}`);
-    console.log(compaireDate);
-    console.log(resultColor);
+
 
     //БЛОК ПОД КНОПКАМИ С РЕЗОЛЮЦИЕЙ ПО ВЕРСИИ БАЗЫ ДАННЫХ
     if (dataBase) {
@@ -304,6 +304,7 @@ function coordConvert() {
         var dataBase = document.body.innerHTML.match(regdataBase);
         if (dataBase) {
             dataBase = dataBase[0];
+            dataBase = dataBase.replace(/[-]*/gi, '');
             if (dataBase != 'online') {
                 const yearDataBase = dataBase.slice(0, 4);
                 const mounthDataBase = dataBase.slice(5, 7);
