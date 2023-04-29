@@ -3,7 +3,7 @@
     "short_name": "LY",
     "description": "Convert links to active",
     "author": "Epsont (Ilya Akhmanov) 2GIS company",
-    "version": "1.0",
+    "version": "1.1",
     "manifest_version": 3,
     
     "icons": {
