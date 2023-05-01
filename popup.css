@@ -1,5 +1,6 @@
 body {
     color: azure;
+    background-image: url(icons/background.png);
     background-color: black;
     text-align:center;
     width:200px;
