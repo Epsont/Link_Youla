@@ -34,11 +34,14 @@ function checkPage() {
 
 
 // РЕГУЛЯРКИ
-const regLink1 = /(?<=Link: )(https|http)\:\/\/2gis\.ru\/[0-9a-zA-Zа-яА-ЯёЁ№\/\.,!_╎-\s]*\?routeTab/g;
+// const regLink1 = /(?<=Link: )(https|http)\:\/\/2gis\.ru\/[0-9a-zA-Zа-яА-ЯёЁ№\/\.,!_╎-\s]*\?routeTab/g;
+const regLink1 = /(?<=Link: )(https|http)\:\/\/2gis\.ru\/[0-9a-zA-Zа-яА-ЯёЁ№\/\.\(\),!_\?\"╎|-\s]*(\?routeTab|)/g;
 const regLink2 = /(?<=tap(P|p)oint: )https\:\/\/2gis\.ru\/geo\/[0-9\.,]*/g;
 const regLink3 = /(?<=user(L|l)ocation: )https\:\/\/2gis\.ru\/geo\/[0-9\.,]*/g;
+const regSender = /(?<=mailto:).*(?=">)/g;
 const regCoord = /[0-9\-]{2,3}\.[0-9]*/g;
 const regdataBase = /(?<=(По данным города:.*|Based on city data:.*|Отправлено:.*)\()([0-9\-\.]*|online)(?=\))/g;
+const regdataBaseUndefined = /(?<=(По данным города:.*|Based on city data:.*|Отправлено:.*))Не определен/g;
 const regCreationDate = /[0-9\.]*(?=,)/g;
 
 // ПЕРЕМЕННЫЕ ДЛЯ СРАВНЕНИЯ ДАТ
@@ -48,12 +51,15 @@ var resultColor = "#87CEEB";
 
 
 
+
 function linkConvert() {
 
     //  ПОИСК ССЫЛОК НА СТРАНИЧКЕ
     var newLink1 = document.body.innerHTML.match(regLink1);
     var newLink2 = document.body.innerHTML.match(regLink2);
     var newLink3 = document.body.innerHTML.match(regLink3);
+    var sender = document.body.innerHTML.match(regSender);
+    console.log(`Отправитель: ${sender}`);
     if (newLink1) {
         newLink1 = newLink1[0];
     };
@@ -63,9 +69,15 @@ function linkConvert() {
     if (newLink3) {
         newLink3 = newLink3[0];
     };
+    if (sender) {
+        sender = sender[0];
+        console.log(`Отправитель: ${sender}`);
+    };
     console.log(`Link: ${newLink1}`);
     console.log(`tapPoint: ${newLink2}`);
     console.log(`userLocation: ${newLink3}`);
+    console.log(`${regSender}`)
+    console.log(`Отправитель: ${sender}`);
 
     //COORDINATES
     if (newLink2) {
@@ -182,8 +194,18 @@ function linkConvert() {
         };
     };
 
+    if (dataBase == undefined) {
+        console.log('Город не определён!');
+        var dataBase = document.body.innerHTML.match(regdataBaseUndefined);
+        dataBase = dataBase[0];
+        if (dataBase == 'Не определен') {
+            resultCompaireDate = 'Не удалось определить проект';
+            resultColor = "#A9A9A9";
+        };
+    };
+
     //CREATION DATE
-    if (dataBase != 'online'){
+    if (dataBase != 'online' && dataBase != 'Не определен') {
         const creationDateTime = document.querySelectorAll('[data-bind="text: creationDateTime"]');
         var creationDate = creationDateTime[0].innerHTML;
         const dayCreationDate = creationDate.slice(0,2);
@@ -195,7 +217,8 @@ function linkConvert() {
     };
 
     //COMPAIRE DATE
-    if (dataBase != 'online'){
+    if (dataBase != 'online' && dataBase != 'Не определен'){
+        console.log(dataBase);
         if (dataBase.getFullYear() != creationDate.getFullYear()){
             var compaireDate = false;
             resultCompaireDate = 'Прошлогодняя версия базы данных!';
@@ -233,6 +256,18 @@ function linkConvert() {
         dataBaseBlock.innerHTML = `${resultCompaireDate}`
         objTapUser.after(dataBaseBlock);
     };
+
+
+    //БЛОК ПОД РЕЗОЛЮЦИИ ВЕРСИИ БАЗЫ ДАННЫХ С ИНФО ОБ ОТПРАВИТЕЛЕ
+    if (sender) {
+
+        const senderBlock = document.createElement('div');
+            senderBlock.setAttribute("style",`border:2px solid ${resultColor};border-radius:15px;padding: 0.1em;justify-content: space-between;text-align:center;background-color:${resultColor};color:white`);
+        senderBlock.innerHTML = `<a href="https://youla.2gis.local/vorwands#/search/searchString=%22${sender}%22" target="_blank">${sender}</a>`
+        objTapUser.after(senderBlock);
+    };
+
+    
 
 };
 
