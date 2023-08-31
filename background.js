@@ -353,6 +353,7 @@ function coordConvert() {
         };
     };
 
+    
     //CREATION DATE
     if (dataBase != 'online' && dataBase != undefined) {
         const creationDateTime = document.querySelectorAll('[data-bind="text: creationDateTime"]');
