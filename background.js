@@ -122,12 +122,14 @@ function linkConvert() {
     var objTapUser = document.getElementsByClassName("link-under-the-map")[0];
 
     //LINK
-    const link = document.createElement('div');
-    link.setAttribute("style","width:48px;height:48px;border:2px solid #00BFFF;border-radius:15px;float:left;");
-    link.setAttribute("onmouseover","this.style.backgroundColor='#F0F8FF';");
-    link.setAttribute("onmouseout","this.style.backgroundColor='white';");
-    link.innerHTML = `<a href="${newLink1}" target="_blank" title="Построить маршрут пользователя: ${newLink1}"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 32 32" fill="currentColor"><path d="M13 13a4 4 0 1 0-4 4 4 4 0 0 0 4-4zm-6 0a2 2 0 1 1 2 2 2 2 0 0 1-2-2z"></path><path d="M24 15.14V10.5a4.5 4.5 0 0 0-9 0v11a2.5 2.5 0 0 1-5 0V19H8v2.5a4.5 4.5 0 0 0 9 0v-11a2.5 2.5 0 0 1 5 0v4.64a4 4 0 1 0 2 0zM23 21a2 2 0 1 1 2-2 2 2 0 0 1-2 2z"></path></svg></a>`;
-    objTapUser.append(link);
+    if (newLink1) {
+        const link = document.createElement('div');
+        link.setAttribute("style","width:48px;height:48px;border:2px solid #00BFFF;border-radius:15px;float:left;");
+        link.setAttribute("onmouseover","this.style.backgroundColor='#F0F8FF';");
+        link.setAttribute("onmouseout","this.style.backgroundColor='white';");
+        link.innerHTML = `<a href="${newLink1}" target="_blank" title="Построить маршрут пользователя: ${newLink1}"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 32 32" fill="currentColor"><path d="M13 13a4 4 0 1 0-4 4 4 4 0 0 0 4-4zm-6 0a2 2 0 1 1 2 2 2 2 0 0 1-2-2z"></path><path d="M24 15.14V10.5a4.5 4.5 0 0 0-9 0v11a2.5 2.5 0 0 1-5 0V19H8v2.5a4.5 4.5 0 0 0 9 0v-11a2.5 2.5 0 0 1 5 0v4.64a4 4 0 1 0 2 0zM23 21a2 2 0 1 1 2-2 2 2 0 0 1-2 2z"></path></svg></a>`;
+        objTapUser.append(link);
+    };
 
 
     //TAPPOINT
@@ -353,7 +355,6 @@ function coordConvert() {
         };
     };
 
-    
     //CREATION DATE
     if (dataBase != 'online' && dataBase != undefined) {
         const creationDateTime = document.querySelectorAll('[data-bind="text: creationDateTime"]');
