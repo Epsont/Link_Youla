@@ -22,7 +22,7 @@ function checkPage() {
 
     if (checking == undefined) {
         console.log("Нет совпадения")
-        return;
+        coordConvert();
     } else if (checking == 'Ошибки транспорта') {
         console.log("Совпадение найдено. Ошибки транспорта")
         linkConvert();
@@ -39,10 +39,12 @@ const regLink1 = /(?<=Link: )(https|http)\:\/\/2gis\.ru\/[0-9a-zA-Zа-яА-Яё�
 const regLink2 = /(?<=tap(P|p)oint: )https\:\/\/2gis\.ru\/geo\/[0-9\.,]*/g;
 const regLink3 = /(?<=user(L|l)ocation: )https\:\/\/2gis\.ru\/geo\/[0-9\.,]*/g;
 const regSender = /(?<=mailto:).*(?=">)/g;
+const regSumVorwands = /(?<=<span data-bind="text: vorwandsTotal">)[0-9]*(?=<\/span>)/g;
 const regCoord = /[0-9\-]{2,3}\.[0-9]*/g;
 const regdataBase = /(?<=(По данным города:.*|Based on city data:.*|Отправлено:.*)\()([0-9\-\.]*|online)(?=\))/g;
 const regdataBaseUndefined = /(?<=(По данным города:.*|Based on city data:.*|Отправлено:.*))Не определен/g;
 const regCreationDate = /[0-9\.]*(?=,)/g;
+
 
 // ПЕРЕМЕННЫЕ ДЛЯ СРАВНЕНИЯ ДАТ
 var compaireDate = true;
@@ -264,16 +266,69 @@ function linkConvert() {
     if (sender) {
 
         const senderBlock = document.createElement('div');
-            senderBlock.setAttribute("style",`border:2px solid ${resultColor};border-radius:15px;padding: 0.1em;justify-content: space-between;text-align:center;background-color:${resultColor};color:white`);
-        senderBlock.innerHTML = `<a href="https://youla.2gis.local/vorwands#/search/searchString=%22${sender}%22" target="_blank">${sender}</a>`
+        senderBlock.setAttribute("style",`border:2px solid ${resultColor};border-radius:15px;padding: 0.1em;justify-content: space-between;text-align:center;background-color:${resultColor};color:white`);
+        senderLink = `https://youla.2gis.local/vorwands#/search/searchString=%22${sender}%22`
+        console.log(senderLink);
+        senderBlock.innerHTML = `<a href="${senderLink}" target="_blank">${sender}</a>`
         objTapUser.after(senderBlock);
     };
 
-    
+    // НАСТРОЙКА ОТОБРАЖЕНИЯ КОММЕНТАРИЕВ
+    var styleComments = document.querySelector("#commentsTab p");
+    console.log(styleComments);
+    if (styleComments) {
+        styleComments.setAttribute("style","white-space:normal");
+    };
 
+
+    // ТЕСТЫ С ПОДСЧЁТОМ ВЫПОЛНЕННЫХ ПОЛЬЗОВАТЕЛЬСКИХ ЗАЦЕПОК
+    const senderPage = new XMLHttpRequest();
+    console.log(senderPage);
+    senderPage.open('GET', senderLink, true);
+    console.log(senderPage);
+    senderPage.onload = () => {
+        console.log(senderPage.responseURL);
+      };
+    senderPage.send();
+
+    // senderPage.onreadystatechange = function() {
+    //     if(senderPage.readyState == 4 && senderPage.status == 200) {
+    //         const source1 = senderPage.querySelectorAll('[data-bind="text: vorwandsTotal"]');
+    //         console.log(source1);
+    //         var sumVorwands = document.body.innerHTML.match(regSumVorwands);
+    //         console.log(sumVorwands);
+    //     }
+
+    senderPage.onreadystatechange = function() {
+        if(senderPage.readyState == 4 && senderPage.status == 200) {
+
+            tmp = document.createElement('div');
+            tmp.style.display = 'none';
+            document.body.appendChild(tmp);
+            tmp.innerHTML = senderPage.responseUrl;
+            console.log(tmp.innerHTML);
+            
+            resources = Array.from(tmp.querySelectorAll('[data-bind="text: vorwandsTotal"]'));
+            // resources = tmp.querySelectorAll('[data-bind="text: vorwandsTotal"]');
+            console.log(resources);
+            console.log(resources.length);
+
+            // пройтись по массиву resources и всё загрузить
+        };
+
+
+    }
+
+    
 };
 
 function coordConvert() {
+
+    var sender = document.body.innerHTML.match(regSender);
+    if (sender) {
+        sender = sender[0];
+        console.log(`Отправитель: ${sender}`);
+    };
 
     if (document.querySelectorAll(`[data-bind="text: linkedPoint().latitude + ', ' + linkedPoint().longitude"]`)) {
         const coordDiv = document.querySelectorAll(`[data-bind="text: linkedPoint().latitude + ', ' + linkedPoint().longitude"]`);
@@ -302,6 +357,7 @@ function coordConvert() {
     objLink.append(links);
 
     var objTapUser = document.getElementsByClassName("link-under-the-map")[0];
+
 
     //USERLOCATION
     if (coord) {
@@ -402,5 +458,23 @@ function coordConvert() {
         dataBaseBlock.setAttribute("style", `border:2px solid ${resultColor};border-radius:15px;padding: 0.1em;justify-content: space-between;text-align:center;background-color:${resultColor};color:white`);
         dataBaseBlock.innerHTML = `${resultCompaireDate}`
         objTapUser.after(dataBaseBlock);
+    };
+
+    //БЛОК ПОД РЕЗОЛЮЦИИ ВЕРСИИ БАЗЫ ДАННЫХ С ИНФО ОБ ОТПРАВИТЕЛЕ
+    if (sender) {
+
+        const senderBlock = document.createElement('div');
+        senderBlock.setAttribute("style",`border:2px solid ${resultColor};border-radius:15px;padding: 0.1em;justify-content: space-between;text-align:center;background-color:${resultColor};color:white`);
+        senderLink = `https://youla.2gis.local/vorwands#/search/searchString=%22${sender}%22`
+        console.log(senderLink);
+        senderBlock.innerHTML = `<a href="${senderLink}" target="_blank">${sender}</a>`
+        objTapUser.after(senderBlock);
+    };
+
+    // НАСТРОЙКА ОТОБРАЖЕНИЯ КОММЕНТАРИЕВ
+    var styleComments = document.querySelector("#commentsTab p");
+    console.log(styleComments);
+    if (styleComments) {
+        styleComments.setAttribute("style","white-space:normal");
     };
 };
