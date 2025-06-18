@@ -35,7 +35,7 @@ function checkPage() {
 
 // РЕГУЛЯРКИ
 // const regLink1 = /(?<=Link: )(https|http)\:\/\/2gis\.ru\/[0-9a-zA-Zа-яА-ЯёЁ№\/\.,!_╎-\s]*\?routeTab/g;
-const regLink1 = /(?<=Link: )(https|http)\:\/\/2gis\.ru\/[0-9a-zA-Zа-яА-ЯёЁ№\/\.\(\),!_\?\"╎|-\s]*(\?routeTab|)/g;
+const regLink1 = /(?<=(L|l)ink: )(https|http)\:\/\/2gis\.ru\/[0-9a-zA-Zа-яА-ЯёЁ№\/\.\(\),!_\?\"╎|;\-\s]*(\?routeTab|)/g;
 const regLink2 = /(?<=tap(P|p)oint: )https\:\/\/2gis\.ru\/geo\/[0-9\.,]*/g;
 const regLink3 = /(?<=user(L|l)ocation: )https\:\/\/2gis\.ru\/geo\/[0-9\.,]*/g;
 const regSender = /(?<=mailto:).*(?=">)/g;
