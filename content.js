@@ -1,5 +1,8 @@
 setTimeout(checkPage, 4000);
 
+// Проверка обновления версии
+chrome.runtime.sendMessage({ action: "check_update" });
+
 // ПРОВЕРКА СТРАНИЧКИ НА НАЛИЧИЕ ИСТОЧНИКА "Ошибки транспорта"
 function checkPage() {
     
@@ -400,8 +403,8 @@ function coordConvert() {
             dataBase = dataBase.replace(/[-]*/gi, '');
             if (dataBase != 'online') {
                 const yearDataBase = dataBase.slice(0, 4);
-                const mounthDataBase = dataBase.slice(5, 7);
-                const dayDataBase = dataBase.slice(8,);
+                const mounthDataBase = dataBase.slice(4, 6);
+                const dayDataBase = dataBase.slice(6,);
                 dataBase = new Date(yearDataBase, mounthDataBase - 1, dayDataBase);
                 console.log(`Версия базы данных: ${dataBase}`);
             } else {
